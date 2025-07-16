@@ -1,14 +1,6 @@
 import fs from "fs";
 import path from "path";
 
-const __dirname = import.meta.dirname;
-
-const jsonPath = path.join(__dirname, "./products.json");
-const json = fs.readFileSync(jsonPath, "utf-8");
-const products = JSON.parse(json);
-
-// console.log(products);
-
 import { db } from "./data.js";
 import {
   collection,
@@ -20,12 +12,23 @@ import {
   setDoc,
 } from "firebase/firestore";
 
+
+const __dirname = import.meta.dirname;
+
+const jsonPath = path.join(__dirname, "./products.json");
+const json = fs.readFileSync(jsonPath, "utf-8");
+const products = JSON.parse(json);
+
+// console.log(products);
+
+
 const productsCollection = collection(db, "products");
 
 export const getAllProducts = async () => {
   try {
     const snapshot = await getDocs(productsCollection);
-    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    const products = await snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+     return products;
   } catch (error) {
     console.error(error);
   }

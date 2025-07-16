@@ -1,13 +1,13 @@
 import * as model from "../models/products.model.js";
 
-export const getAllProducts = (req, res) => {
-  res.json(model.getAllProducts());
+export const getAllProducts = async (req, res) => { 
+  res.json(await model.getAllProducts());
 };
 
-export const searchProduct = (req, res) => {
+export const searchProduct = async (req, res) => {
   const { name } = req.query;
 
-  const products = model.getAllProducts();
+  const products = await model.getAllProducts();
 
   const filteredProducts = products.filter((p) =>
     p.name.toLowerCase().includes(name.toLowerCase())
@@ -16,10 +16,10 @@ export const searchProduct = (req, res) => {
   res.json(filteredProducts);
 };
 
-export const getProductById = (req, res) => {
+export const getProductById = async (req, res) => {
   const { id } = req.params;
 
-  const product = model.getProductById(id);
+  const product = await model.getProductById(id);
 
   if (!product) {
     res.status(404).json({ error: "No existe el producto" });
@@ -28,21 +28,21 @@ export const getProductById = (req, res) => {
   res.json(product);
 };
 
-export const createProduct = (req, res) => {
+export const createProduct =  async (req, res) => {
   const { name, price } = req.body;
 
-  const newProduct = model.createProduct({ name, price });
+  const newProduct = await model.createProduct({ name, price });
 
   res.status(201).json(newProduct);
 };
 
-export const deleteProduct = (req, res) => {
+export const deleteProduct = async (req, res) => {
   const productId = parseInt(req.params.id, 10);
 
   const product = model.deleteProduct(productId);
 
   if (!product) {
-    return res.status(404).json({ error: "Producto no encontrado" });
+    return await res.status(404).json({ error: "Producto no encontrado" });
   }
 
   res.status(204).send();
