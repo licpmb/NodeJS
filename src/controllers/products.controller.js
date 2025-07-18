@@ -1,49 +1,58 @@
 import * as model from "../models/products.model.js";
 
-export const getAllProducts = async (req, res) => { 
-  res.json(await model.getAllProducts());
+// Trae todos los productos
+export const getAllProducts = async (req, res) => {
+  try { const products = await model.getAllProducts();
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
 };
 
+// Buscar productos por nombre
 export const searchProduct = async (req, res) => {
-  const { name } = req.query;
-
+  const { name = "" } = req.query; // Default to empty string if name is undefined
   const products = await model.getAllProducts();
-
   const filteredProducts = products.filter((p) =>
     p.name.toLowerCase().includes(name.toLowerCase())
   );
-
   res.json(filteredProducts);
 };
 
+// Buscar productos por ID
 export const getProductById = async (req, res) => {
   const { id } = req.params;
-
   const product = await model.getProductById(id);
-
   if (!product) {
-    res.status(404).json({ error: "No existe el producto" });
+    return res.status(404).json({ error: "Producto no encontrado" });
   }
-
   res.json(product);
 };
 
-export const createProduct =  async (req, res) => {
-  const { name, price } = req.body;
-
-  const newProduct = await model.createProduct({ name, price });
-
+// Crea productos
+export const createProduct = async (req, res) => {
+  const { name, price, categories } = req.body;
+  const newProduct = await model.createProduct({ name, price, categories });
   res.status(201).json(newProduct);
 };
 
-export const deleteProduct = async (req, res) => {
-  const productId = parseInt(req.params.id, 10);
-
-  const product = model.deleteProduct(productId);
-
-  if (!product) {
-    return await res.status(404).json({ error: "Producto no encontrado" });
+// Actualiza productos con ID e información
+export const updateProduct = async (req, res) => {
+  const { id } = req.params;
+  const { name, price, categories } = req.body;
+  const updatedProduct = await model.updateProduct(id, { name, price, categories });
+  if (!updatedProduct) {
+    return res.status(404).json({ error: "Producto no encontrado" });
   }
+  res.json(updatedProduct);
+};
 
+// Elimina un producto por ID
+export const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+  const product = await model.deleteProduct(parseInt(id, 10));
+  if (!product) {
+    return res.status(404).json({ error: "Producto no encontrado" });
+  }
   res.status(204).send();
 };

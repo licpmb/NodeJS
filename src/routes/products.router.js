@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { authentication } from "../middlewares/authentication.js";
 
 const router = Router();
 
@@ -15,14 +16,18 @@ import {
   searchProduct,
   getProductById,
   createProduct,
+  updateProduct,
   deleteProduct,
 } from "../controllers/products.controller.js";
+
 
 router.get("/products", getAllProducts);
 router.get("/products/search", searchProduct);
 router.get("/products/:id", getProductById);
 
-router.post("/products", createProduct);
+router.post("/products", authentication, createProduct);
+router.put("/products/:id", authentication, updateProduct);
+router.delete("/products/:id", authentication, deleteProduct);
 
 router.put("/products/:id", (req, res) => {
   const productId = parseInt(req.params.id, 10);
@@ -37,7 +42,5 @@ router.put("/products/:id", (req, res) => {
   products[productIndex] = { id: productId, name, price };
   res.json(products[productIndex]);
 });
-
-router.delete("/products/:id", deleteProduct);
 
 export default router;
