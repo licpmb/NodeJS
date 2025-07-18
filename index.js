@@ -14,11 +14,18 @@ app.get("/", (req, res) => {
   res.json({ message: "API Rest en Node.js" });
 });
 
+// app.use(bodyParser.json());
+// Routers
 import productsRouter from "./src/routes/products.router.js";
 app.use("/api", productsRouter);
 
+// productRouter.get("/products", authentication, getAllProducts);
+// productRouter.get("/products/:id", authentication, getProductById);
+// productRouter.post("/products", authentication, createProduct);
+
+
 import authRouter from "./src/routes/auth.router.js";
-app.use(authRouter);
+app.use('/api/auth', authRouter);
 
 app.use((req, res, next) => {
   res.status(404).json({ error: "Not Found" });

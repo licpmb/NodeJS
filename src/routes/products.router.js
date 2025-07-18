@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authentication } from "../middlewares/authentication.js";
 
-const router = Router();
+const productsRouter = Router();
 
 const products = [
   { id: 1, name: "Camiseta Deportiva", price: 150 },
@@ -21,15 +21,15 @@ import {
 } from "../controllers/products.controller.js";
 
 
-router.get("/products", getAllProducts);
-router.get("/products/search", searchProduct);
-router.get("/products/:id", getProductById);
+productsRouter.get("/products", getAllProducts);
+productsRouter.get("/products/search", searchProduct);
+productsRouter.get("/products/:id", getProductById);
 
-router.post("/products", authentication, createProduct);
-router.put("/products/:id", authentication, updateProduct);
-router.delete("/products/:id", authentication, deleteProduct);
+productsRouter.post("/products", authentication, createProduct);
+productsRouter.put("/products/:id", authentication, updateProduct);
+productsRouter.delete("/products/:id", authentication, deleteProduct);
 
-router.put("/products/:id", (req, res) => {
+productsRouter.put("/products/:id", (req, res) => {
   const productId = parseInt(req.params.id, 10);
   const productIndex = products.findIndex((p) => p.id === productId);
 
@@ -43,4 +43,4 @@ router.put("/products/:id", (req, res) => {
   res.json(products[productIndex]);
 });
 
-export default router;
+export default productsRouter;
