@@ -19,7 +19,7 @@
 //    res.json({ messge: "ok" });
 // }
 
-
+import "dotenv/config";
 import jwt from "jsonwebtoken";
 
 const default_user = {
@@ -37,7 +37,7 @@ export const login = (req, res) => {
     const payload = { user };
     const expiration = { expiresIn: "1h" };
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, expiration);
+    const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, expiration);
 
     res.json({ token });
   } else {

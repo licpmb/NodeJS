@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authentication } from "../middlewares/authentication.js";
+import { auth } from "../middlewares/auth.middleware.js";
 
 const productsRouter = Router();
 
@@ -25,22 +25,22 @@ productsRouter.get("/products", getAllProducts);
 productsRouter.get("/products/search", searchProduct);
 productsRouter.get("/products/:id", getProductById);
 
-productsRouter.post("/products", authentication, createProduct);
-productsRouter.put("/products/:id", authentication, updateProduct);
-productsRouter.delete("/products/:id", authentication, deleteProduct);
+productsRouter.post("/products", auth, createProduct);
+productsRouter.put("/products/:id", auth, updateProduct);
+productsRouter.delete("/products/:id", auth, deleteProduct);
 
-productsRouter.put("/products/:id", (req, res) => {
-  const productId = parseInt(req.params.id, 10);
-  const productIndex = products.findIndex((p) => p.id === productId);
+// productsRouter.put("/products/:id", (req, res) => {
+//   const productId = parseInt(req.params.id, 10);
+//   const productIndex = products.findIndex((p) => p.id === productId);
 
-  if (productIndex === -1) {
-    return res.status(404).json({ error: "Producto no encontrado" });
-  }
+//   if (productIndex === -1) {
+//     return res.status(404).json({ error: "Producto no encontrado" });
+//   }
 
-  const { name, price } = req.body;
+//   const { name, price } = req.body;
 
-  products[productIndex] = { id: productId, name, price };
-  res.json(products[productIndex]);
-});
+//   products[productIndex] = { id: productId, name, price };
+//   res.json(products[productIndex]);
+// });
 
 export default productsRouter;

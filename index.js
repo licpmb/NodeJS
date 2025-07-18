@@ -2,7 +2,8 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 const app = express();
-
+import authRouter from "./src/routes/auth.router.js";
+import productsRouter from "./src/routes/products.router.js";
 // app.use((req, res, next) => {
 //   res.json({ message: "En mantenimiento" });
 // });
@@ -16,16 +17,14 @@ app.get("/", (req, res) => {
 
 // app.use(bodyParser.json());
 // Routers
-import productsRouter from "./src/routes/products.router.js";
+app.use('/api/auth', authRouter);
 app.use("/api", productsRouter);
 
 // productRouter.get("/products", authentication, getAllProducts);
 // productRouter.get("/products/:id", authentication, getProductById);
 // productRouter.post("/products", authentication, createProduct);
 
-
-import authRouter from "./src/routes/auth.router.js";
-app.use('/api/auth', authRouter);
+console.log("JWT_SECRET_KEY:", process.env.JWT_SECRET_KEY); // Debug
 
 app.use((req, res, next) => {
   res.status(404).json({ error: "Not Found" });
