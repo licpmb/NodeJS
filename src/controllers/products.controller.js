@@ -36,15 +36,24 @@ export const createProduct = async (req, res) => {
   res.status(201).json(newProduct);
 };
 
-// Actualiza productos con ID e información
+// Actualiza un producto por ID
 export const updateProduct = async (req, res) => {
   const { id } = req.params;
   const { name, price, categories } = req.body;
-  const updatedProduct = await model.updateProduct(id, { name, price, categories });
-  if (!updatedProduct) {
-    return res.status(404).json({ error: "Producto no encontrado" });
+  try {
+    if (!name || !price || !categories) {
+      return res.status(400).json({ error: "Faltan campos obligatorios: name, price, categories" });
+    }
+    const updatedProduct = await model.updateProduct(id, { name, price, categories });
+    if (!updatedProduct) {
+      return res.status(404).json({ error: "Producto no encontrado" });
+    }
+    console.log(`El producto con ID ${id} ha sido actualizado`);
+    res.status(200).json(updatedProduct);
+  } catch (error) {
+    console.error(`Error al actualizar el producto con ID ${id}:`, error);
+    res.status(500).json({ error: "Error interno del servidor" });
   }
-  res.json(updatedProduct);
 };
 
 // Elimina un producto por ID
