@@ -148,7 +148,7 @@ npm run dev
 
 ### Eliminar un producto
 
-- **DELETE** `/products/:id`
+- **DELETE** `api/products/:id`
 - **Descripción:** Elimina un producto por su ID.
 - **Parámetros:**
   - `id` (path, requerido): ID del producto a eliminar.

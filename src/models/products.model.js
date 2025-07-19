@@ -51,7 +51,7 @@ export const createProduct = async (data) => {
 };
 
 // PUT
-export async function updateProduct(id, productData) {
+export const updateProduct = async (id, productData) => {
   try {
     const productRef = doc(productsCollection, id);
     const snapshot = await getDoc(productRef);
